@@ -1,6 +1,6 @@
 # replicanano2_malarm
 
-A new Flutter project.
+A new Flutter project. Featuring the Malarm Project.
 
 ## Getting Started
 
