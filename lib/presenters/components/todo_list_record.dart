@@ -16,7 +16,10 @@ class RecordOfToDoList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 50,
+      padding: const EdgeInsets.symmetric(
+        vertical: 20,
+        horizontal: 16
+      ),
       color: Colors.white,
       child: Column(
        children: [
