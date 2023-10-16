@@ -53,7 +53,7 @@ class _MyWidgetState extends State<HomeWidget> {
     List<Widget> rows = [];
 
     for (var rec in toDoListRecord) {
-      rows.add(recordOfToDoList(rec: rec));
+      rows.add(RecordOfToDoList(rec: rec));
     }
 
     return rows;

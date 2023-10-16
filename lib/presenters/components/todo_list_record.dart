@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:replicanano2_malarm/data/entities/records.dart';
 
-class recordOfToDoList extends StatelessWidget {
+class RecordOfToDoList extends StatelessWidget {
   
-  recordOfToDoList({
+  RecordOfToDoList({
     super.key,
     required this.rec
     });
@@ -24,7 +24,7 @@ class recordOfToDoList extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(dateFormatter.format(rec.date)),
-            Text(rec.complete == 1 ? "Complete" : "Incomplete"),
+            Text(rec.complete == true ? "Complete" : "Incomplete"),
           ],
         ),
 
