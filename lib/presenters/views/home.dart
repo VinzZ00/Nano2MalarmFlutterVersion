@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 // import 'package:flutter/material.dart';
 // import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:replicanano2_malarm/presenters/components/todo_list_record.dart';
-import 'package:replicanano2_malarm/data/entities/records.dart';
+import 'package:replicanano2_malarm/core/entities/records.dart';
 import 'package:replicanano2_malarm/presenters/views/form.dart';
 import 'package:uuid/uuid.dart';
 import 'package:replicanano2_malarm/core/services/persistent_storage.dart';

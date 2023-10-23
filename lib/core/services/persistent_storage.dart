@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import '../../data/entities/records.dart';
+import '../entities/records.dart';
 
 class PersistentStorage {
   

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:replicanano2_malarm/data/entities/records.dart';
+import 'package:replicanano2_malarm/core/entities/records.dart';
 
 class RecordOfToDoList extends StatelessWidget {
   
