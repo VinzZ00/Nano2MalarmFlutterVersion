@@ -1,6 +1,12 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: prefer_const_constructors
+
+
+import 'package:flutter/cupertino.dart';
+// import 'package:flutter/material.dart';
+// import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:replicanano2_malarm/presenters/components/todo_list_record.dart';
 import 'package:replicanano2_malarm/data/entities/records.dart';
+import 'package:replicanano2_malarm/presenters/views/form.dart';
 import 'package:uuid/uuid.dart';
 import 'package:replicanano2_malarm/core/services/persistent_storage.dart';
 
@@ -12,8 +18,23 @@ class HomeWidget extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<HomeWidget> {
-  PersistentStorage persistentStorage = PersistentStorage();
+
+ void _showActionSheet(BuildContext context) {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => Dismissible(
+        key: ValueKey("Dismissable_modal"), 
+        direction: DismissDirection.down,
+        onDismissed: (_) {
+          Navigator.pop(context);
+        },
+        child: FormPage(key: ValueKey("FormPage"))
+      )
+    );
+  }
   
+  PersistentStorage persistentStorage = PersistentStorage();
+  BuildContext? _scafoldContext;
   var dbPromise = PersistentStorage().database;
 
   List<CustRecord> toDoListRecord = [];
@@ -23,29 +44,36 @@ class _MyWidgetState extends State<HomeWidget> {
   String id = const Uuid().toString();
   double latitude = 0.0, longitude = 0.0;
   String description = "";
+  
 
   @override
   Widget build(BuildContext context) {
-
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Text(
+    _scafoldContext = context;  
+    return CupertinoPageScaffold(
+      navigationBar : CupertinoNavigationBar(
+        backgroundColor: CupertinoColors.white,
+        middle: Text(
           "Todo List", 
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: CupertinoColors.black),
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.add),
-            color: Colors.black,
-            onPressed: () {}),
-        ],
-        elevation: 0.0,
+        trailing : GestureDetector(
+          child: Icon(CupertinoIcons.add),
+          onTap: () {
+            if (this._scafoldContext != null) {
+              _showActionSheet(_scafoldContext!);
+            }
+          },
+        ),
       ),
-      backgroundColor: Colors.white,
-      body: ListView(
-        children: createRowData(),
-      ),
+      backgroundColor: CupertinoColors.white,
+      child: Builder(
+        builder: (context) {
+          _scafoldContext  = context;
+          return ListView(
+            children: createRowData(),
+          );
+        }
+      )
     );
   }
 

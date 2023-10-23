@@ -1,5 +1,9 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
+
+
 
 class FormPage extends StatefulWidget {
   const FormPage({super.key});
@@ -36,17 +40,19 @@ class _FormPageState extends State<FormPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
+
+    var eventNameTextController = TextEditingController(text: "");
+
+    return CupertinoPageScaffold(
+      child: SafeArea(
         child: Column(
           children: [
-              const Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Input the Event Name'
-                  ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16),
+                child: CupertinoTextField(
+                  padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                  controller: eventNameTextController,
+                  placeholder: "Event"
                 ),
               ),
 
@@ -54,7 +60,7 @@ class _FormPageState extends State<FormPage> {
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 0),
                 child: Row(
                   children: [
-                    const Expanded(
+                    Expanded(
                       flex: 1,
                       child: Text("Select Time",
                       style: TextStyle(
@@ -90,6 +96,35 @@ class _FormPageState extends State<FormPage> {
                   ],
                 ),
               ),
+              CupertinoButton(
+                onPressed: () {},
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: CupertinoColors.systemGrey
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                    child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Padding(
+                            padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
+                            child: Icon(CupertinoIcons.location_solid),
+                          ),
+                          Text("Point on map on where you wanna go"),
+                          ],
+                        ),
+                  ),
+                )
+              ),
+              // TextButton.icon(
+              //   onPressed: () {
+                  
+              //   },
+              //   icon: Icon(Icons.place),
+              //   label: Text("Point on map on where you wanna go")
+              // )
           ],
         ),
       ),
