@@ -18,22 +18,14 @@ class _mapPageState extends State<mapPage> {
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
-      navigationBar: CupertinoNavigationBar(
-        middle: const Text("Map"),
-        leading: CupertinoButton(
-          child: const Text("Back"), 
-          onPressed: () {
-            Navigator.pop(context);
-          })
+      navigationBar: const CupertinoNavigationBar(
+        middle: Text("Map"),
+        leading: CupertinoNavigationBarBackButton()
         ),
-      child: Scaffold(
-        body: FloatingActionButton(
-          onPressed: () {
-            getcurrentloc();
-          },
-          child: const Icon(Icons.location_pin)
-        ),
-      )
+      child: Center(
+        heightFactor: 0.9,
+        child: renderMap()
+        )
     );
   }
 
@@ -44,9 +36,37 @@ class _mapPageState extends State<mapPage> {
     getcurrentloc();
   }
 
+  Widget renderMap() {
+    if (currDevicePosition != null ) {
+      return GoogleMap(
+        initialCameraPosition: CameraPosition(
+          target: LatLng(
+            currDevicePosition!.latitude,
+            currDevicePosition!.longitude
+          ),
+        ),
+      );
+    } else {
+      currDevicePosition = Position(longitude: 0.0, latitude: 0.0, timestamp: DateTime.timestamp(), accuracy: 0.0, altitude: 0.0, altitudeAccuracy: 0.0, heading: 0.0, headingAccuracy: 0.0, speed: 0.0, speedAccuracy: 0.0);
+      return GoogleMap(
+        initialCameraPosition: CameraPosition(
+          target: LatLng(
+            currDevicePosition!.latitude,
+            currDevicePosition!.longitude
+          ),
+        ),
+      );
+    }
+  }
+
+ 
+
   void getcurrentloc() async {
-    setState(() async {
-      currDevicePosition =  await determinePosition();  
+    var retrievedLoc = await determinePosition();
+
+    setState(()  {
+      currDevicePosition = retrievedLoc;
+      print("latitude ${currDevicePosition!.latitude}, longitude ${currDevicePosition!.longitude}, accuracy ${currDevicePosition!.accuracy}");
     });
   }
 }

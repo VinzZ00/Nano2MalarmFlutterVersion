@@ -97,7 +97,9 @@ class _FormPageState extends State<FormPage> {
                 ),
               ),
               CupertinoButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, "/form/map");
+                },
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),

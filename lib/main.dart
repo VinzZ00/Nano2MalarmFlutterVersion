@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:replicanano2_malarm/presenters/views/form.dart'; 
 import 'package:replicanano2_malarm/presenters/views/home.dart';
+import 'package:replicanano2_malarm/presenters/views/map_view.dart';
 
 
 void main() => runApp(CupertinoApp(
@@ -8,7 +9,8 @@ void main() => runApp(CupertinoApp(
       '/' :(p0) {
         return HomeWidget();
       },
-      '/form' :(p0) => FormPage()
+      '/form' :(p0) => FormPage(),
+      '/form/map' : (p0) => mapPage(),
     },
     debugShowCheckedModeBanner: false,
 ));
