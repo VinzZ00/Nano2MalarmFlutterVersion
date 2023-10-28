@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 // import 'package:flutter/material.dart';
 
 
@@ -15,7 +17,7 @@ class FormPage extends StatefulWidget {
 class _FormPageState extends State<FormPage> {
 
   DateTime selectedDate = DateTime(2023, 10, 18, 16, 36);
-
+  Brightness brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
   void _showDialog(Widget child) {
     showCupertinoModalPopup<void>(
       context: context,
@@ -40,7 +42,6 @@ class _FormPageState extends State<FormPage> {
 
   @override
   Widget build(BuildContext context) {
-
     var eventNameTextController = TextEditingController(text: "");
 
     return CupertinoPageScaffold(
@@ -52,7 +53,8 @@ class _FormPageState extends State<FormPage> {
                 child: CupertinoTextField(
                   padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                   controller: eventNameTextController,
-                  placeholder: "Event"
+                  placeholder: "Event",
+                  placeholderStyle: TextStyle(color: (brightness == Brightness.dark) ? Colors.grey[600] : Colors.black),
                 ),
               ),
 
@@ -85,8 +87,9 @@ class _FormPageState extends State<FormPage> {
                             ),
                             child: Text(
                               '${selectedDate.month}-${selectedDate.day}-${selectedDate.year} ${selectedDate.hour}:${selectedDate.minute}',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 20.0,
+                                color: (MediaQuery.of(context).platformBrightness == Brightness.dark) ? Colors.grey[400] : Colors.black
                               ),
                             ),
                           ),
@@ -103,18 +106,21 @@ class _FormPageState extends State<FormPage> {
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(8),
-                    color: CupertinoColors.systemGrey
+                    color: (MediaQuery.of(context).platformBrightness == Brightness.dark)  ? Colors.grey[800] : Colors.grey[400]
                   ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
                     child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children: [
                             Padding(
                             padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
-                            child: Icon(CupertinoIcons.location_solid),
-                          ),
-                          Text("Point on map on where you wanna go"),
+                            child: Icon(CupertinoIcons.location_solid, color: (MediaQuery.of(context).platformBrightness == Brightness.dark) ? Colors.grey[400] : Colors.grey[700]),
+                            ),
+                            Text(
+                              "Point on map on where you wanna go",
+                              style: TextStyle(color: (MediaQuery.of(context).platformBrightness == Brightness.dark) ? Colors.grey[400] : Colors.black),
+                            ),
                           ],
                         ),
                   ),

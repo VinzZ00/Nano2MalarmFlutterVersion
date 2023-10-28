@@ -20,7 +20,6 @@ class RecordOfToDoList extends StatelessWidget {
         vertical: 20,
         horizontal: 16
       ),
-      color: Colors.white,
       child: Column(
        children: [
         Row(

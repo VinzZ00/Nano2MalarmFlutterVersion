@@ -1,3 +1,7 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -12,20 +16,44 @@ class mapPage extends StatefulWidget {
 }
 
 class _mapPageState extends State<mapPage> {
-
+  final Completer<GoogleMapController> _controller = Completer();
   Position? currDevicePosition;
+  
+  Set<Marker> userMarker = <Marker>{Marker(markerId: MarkerId("UserMarker"))};
 
+
+  
   @override
   Widget build(BuildContext context) {
+
     return CupertinoPageScaffold(
       navigationBar: const CupertinoNavigationBar(
         middle: Text("Map"),
         leading: CupertinoNavigationBarBackButton()
+      ),
+      child: Scaffold(
+        // heightFactor: 0.9,
+        body: GoogleMap(
+          myLocationButtonEnabled: false,
+          initialCameraPosition: CameraPosition(
+            target: LatLng(
+              0,
+              0
+            ),
+          ),
+          onMapCreated: (controller) {
+            _controller.complete(controller);
+          },
+          markers: userMarker
         ),
-      child: Center(
-        heightFactor: 0.9,
-        child: renderMap()
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            print("Clicked");
+            getcurrentloc();
+          },
+          child: Icon(Icons.location_pin),
         )
+      ),
     );
   }
 
@@ -34,39 +62,31 @@ class _mapPageState extends State<mapPage> {
     // TODO: implement initState
     super.initState();
     getcurrentloc();
-  }
-
-  Widget renderMap() {
-    if (currDevicePosition != null ) {
-      return GoogleMap(
-        initialCameraPosition: CameraPosition(
-          target: LatLng(
-            currDevicePosition!.latitude,
-            currDevicePosition!.longitude
-          ),
-        ),
-      );
-    } else {
-      currDevicePosition = Position(longitude: 0.0, latitude: 0.0, timestamp: DateTime.timestamp(), accuracy: 0.0, altitude: 0.0, altitudeAccuracy: 0.0, heading: 0.0, headingAccuracy: 0.0, speed: 0.0, speedAccuracy: 0.0);
-      return GoogleMap(
-        initialCameraPosition: CameraPosition(
-          target: LatLng(
-            currDevicePosition!.latitude,
-            currDevicePosition!.longitude
-          ),
-        ),
-      );
-    }
-  }
-
- 
+  } 
 
   void getcurrentloc() async {
     var retrievedLoc = await determinePosition();
 
     setState(()  {
       currDevicePosition = retrievedLoc;
-      print("latitude ${currDevicePosition!.latitude}, longitude ${currDevicePosition!.longitude}, accuracy ${currDevicePosition!.accuracy}");
+      userMarker = <Marker>{Marker(markerId: MarkerId("UserMarker"), position: LatLng(currDevicePosition!.latitude, currDevicePosition!.longitude))};
     });
+
+    final GoogleMapController controller = await _controller.future;
+    controller.animateCamera(
+      CameraUpdate.newCameraPosition(CameraPosition(target: LatLng(currDevicePosition!.latitude, currDevicePosition!.longitude), zoom: 12))
+    );
+  }
+
+  Future<void> _disposeController() async {
+    final GoogleMapController controller = await _controller.future;
+    controller.dispose();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _disposeController();
+    super.dispose();
   }
 }

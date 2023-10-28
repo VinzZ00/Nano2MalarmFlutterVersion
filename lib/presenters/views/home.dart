@@ -2,6 +2,7 @@
 
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 // import 'package:flutter/material.dart';
 // import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:replicanano2_malarm/presenters/components/todo_list_record.dart';
@@ -48,16 +49,14 @@ class _MyWidgetState extends State<HomeWidget> {
 
   @override
   Widget build(BuildContext context) {
+
+
     _scafoldContext = context;  
     return CupertinoPageScaffold(
       navigationBar : CupertinoNavigationBar(
-        backgroundColor: CupertinoColors.white,
-        middle: Text(
-          "Todo List", 
-          style: TextStyle(color: CupertinoColors.black),
-        ),
+        middle: Text("Todo List"),
         trailing : GestureDetector(
-          child: Icon(CupertinoIcons.add),
+          child: Icon(CupertinoIcons.add, color: (MediaQuery.of(context).platformBrightness == Brightness.dark) ? Colors.white : Colors.black ,),
           onTap: () {
             if (this._scafoldContext != null) {
               _showActionSheet(_scafoldContext!);
@@ -65,7 +64,6 @@ class _MyWidgetState extends State<HomeWidget> {
           },
         ),
       ),
-      backgroundColor: CupertinoColors.white,
       child: Builder(
         builder: (context) {
           _scafoldContext  = context;
