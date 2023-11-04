@@ -82,7 +82,7 @@ class _MyWidgetState extends State<HomeWidget> {
 
     List<CustRecord> toDoListRecord = [
       CustRecord('1', 0.0, 0.0, 'Description 1 abcdefghijklmn', DateTime.now(), true),
-      CustRecord('2', 0.0, 0.0, 'Description 2 ', DateTime.now(), true),
+      CustRecord('2', 0.0, 0.0, 'Description 2 ', DateTime.now(), false),
       CustRecord('3', 0.0, 0.0, 'Desc 3', DateTime.now(), true),
     ];
 

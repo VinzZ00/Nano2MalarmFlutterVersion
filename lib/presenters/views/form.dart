@@ -17,7 +17,7 @@ class FormPage extends StatefulWidget {
 class _FormPageState extends State<FormPage> {
 
   DateTime selectedDate = DateTime(2023, 10, 18, 16, 36);
-  Brightness brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
+
   void _showDialog(Widget child) {
     showCupertinoModalPopup<void>(
       context: context,
@@ -54,7 +54,7 @@ class _FormPageState extends State<FormPage> {
                   padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                   controller: eventNameTextController,
                   placeholder: "Event",
-                  placeholderStyle: TextStyle(color: (brightness == Brightness.dark) ? Colors.grey[600] : Colors.black),
+                  placeholderStyle: TextStyle(color: (MediaQuery.of(context).platformBrightness == Brightness.dark) ? Colors.grey[600] : Colors.black),
                 ),
               ),
 
