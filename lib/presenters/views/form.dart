@@ -1,8 +1,11 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 // import 'package:flutter/material.dart';
 
 
@@ -16,6 +19,9 @@ class FormPage extends StatefulWidget {
 
 class _FormPageState extends State<FormPage> {
 
+  Marker? userLoc;
+  Marker? destLoc;
+  String? destName;
   DateTime selectedDate = DateTime(2023, 10, 18, 16, 36);
 
   void _showDialog(Widget child) {
@@ -99,9 +105,22 @@ class _FormPageState extends State<FormPage> {
                   ],
                 ),
               ),
+
               CupertinoButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, "/form/map");
+                onPressed: () async {
+                  var result = await Navigator.pushNamed(context, "/form/map");
+                  if (result is Map<String,Set<Marker>>) {
+                    destName = result.keys.first;
+                    for (Marker m in result.values.first) {
+                      setState(() {
+                        if ((m).markerId == MarkerId("UserMarker")) {
+                          userLoc = (m);
+                        } else {
+                          destLoc = (m);
+                        }
+                      });
+                    };
+                  }
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -118,6 +137,7 @@ class _FormPageState extends State<FormPage> {
                             child: Icon(CupertinoIcons.location_solid, color: (MediaQuery.of(context).platformBrightness == Brightness.dark) ? Colors.grey[400] : Colors.grey[700]),
                             ),
                             Text(
+                              (destName != null) ? destName! : 
                               "Point on map on where you wanna go",
                               style: TextStyle(color: (MediaQuery.of(context).platformBrightness == Brightness.dark) ? Colors.grey[400] : Colors.black),
                             ),
@@ -126,13 +146,8 @@ class _FormPageState extends State<FormPage> {
                   ),
                 )
               ),
-              // TextButton.icon(
-              //   onPressed: () {
-                  
-              //   },
-              //   icon: Icon(Icons.place),
-              //   label: Text("Point on map on where you wanna go")
-              // )
+              
+              
           ],
         ),
       ),
