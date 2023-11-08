@@ -32,4 +32,17 @@ class APIService {
       throw Exception("Elvin-99 Future<Map<String, dynamic>> return Error fetching API with HTTP Error Code : ${jsonResponse['status']}");
     }
   }
+
+  Future<Map<String, dynamic>> postRequest(String appendingUrl, Map<String, String> header, Map<String, dynamic> requestBody) async {
+    String url = '${[baseUrl, appendingUrl].join("/")}';
+    final response = await http.post(Uri.parse(url), headers: header, body: jsonEncode(requestBody));
+
+    if (response.statusCode  != 200) {
+      print("Error");
+      throw Exception("Elvin-98 Future<Map<String, dynamic>> postRequest return status code != 200, status : ${response.statusCode}");
+    }
+
+    return response as Map<String, dynamic>;
+
+  }
 }

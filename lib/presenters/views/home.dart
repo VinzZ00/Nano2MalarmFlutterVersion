@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors
 
 
+import 'dart:ui';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter/material.dart';
@@ -22,6 +24,7 @@ class _MyWidgetState extends State<HomeWidget> {
 
  void _showActionSheet(BuildContext context) {
     showCupertinoModalPopup<void>(
+      
       context: context,
       builder: (BuildContext context) => Dismissible(
         key: ValueKey("Dismissable_modal"), 
@@ -56,7 +59,7 @@ class _MyWidgetState extends State<HomeWidget> {
       navigationBar : CupertinoNavigationBar(
         middle: Text("Todo List"),
         trailing : GestureDetector(
-          child: Icon(CupertinoIcons.add, color: (MediaQuery.of(context).platformBrightness == Brightness.dark) ? Colors.white : Colors.black ,),
+          child: Icon(CupertinoIcons.add, color: CupertinoColors.activeBlue),
           onTap: () {
             if (this._scafoldContext != null) {
               _showActionSheet(_scafoldContext!);
