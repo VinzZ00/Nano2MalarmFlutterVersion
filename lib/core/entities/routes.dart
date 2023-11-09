@@ -7,9 +7,14 @@ class GoogleRoute {
   GoogleRoute(this.second, this.polyLine);
 
   factory GoogleRoute.fromJson(Map<String, dynamic> json) {
-    var sec = (json['routes']['duration'] as String);
+    // print("masuk ke factory");
+    // print("json : ${json['routes'][0]['duration']}");
+    var sec = json['routes'][0]['duration'] as String;
     var second = int.tryParse(sec.substring(0, sec.length)) ?? -1;
-    var polyLine = json['routes']['polyline'] as String;
+
+    // print("poly: ${json['routes'][0]['polyline']["encodedPolyline"]}");
+
+    var polyLine = json['routes'][0]['polyline']["encodedPolyline"] as String;
 
     return GoogleRoute(second, polyLine);
   }

@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:http/http.dart';
-import 'package:replicanano2_malarm/core/constant/GoogleKeyConstant.dart';
+import 'package:replicanano2_malarm/core/constant/google_key_constant.dart';
 import 'package:replicanano2_malarm/core/entities/places.dart';
 import 'package:replicanano2_malarm/core/services/api_service.dart';
 
@@ -16,12 +13,12 @@ abstract class GoogleGeocodingAbs {
 }
 
 
-class GoogleGeocoding extends GoogleGeocodingAbs {
+class GoogleGeocodingDataSource extends GoogleGeocodingAbs {
   
-  String apiKey = GoogleAPIKey.Key;
+  String apiKey = GoogleAPIKey.key;
   late APIService apiServe;
 
-  GoogleGeocoding() {
+  GoogleGeocodingDataSource() {
     apiServe = APIService(baseUrl);
   }
 

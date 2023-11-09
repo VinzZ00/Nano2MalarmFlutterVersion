@@ -10,7 +10,7 @@ void main() => runApp(CupertinoApp(
         return HomeWidget();
       },
       '/form' :(p0) => FormPage(),
-      '/form/map' : (p0) => mapPage(),
+      '/form/map' : (p0) => MapPage(),
     },
     debugShowCheckedModeBanner: false,
 ));

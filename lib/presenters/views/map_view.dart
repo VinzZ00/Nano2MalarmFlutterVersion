@@ -11,31 +11,50 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:replicanano2_malarm/core/services/geolocator.dart';
 
 import 'package:replicanano2_malarm/data/usecases/ReverseGeoCoding.dart';
+import 'package:replicanano2_malarm/data/usecases/getRoutes.dart';
 
 import '../../core/entities/places.dart';
 
 
-class mapPage extends StatefulWidget {
-  const mapPage({super.key});
+class MapPage extends StatefulWidget {
+  const MapPage({super.key});
 
   @override
-  State<mapPage> createState() => _mapPageState();
+  State<MapPage> createState() => _MapPageState();
 }
 
-class _mapPageState extends State<mapPage> {
-  ReverseGeocodingUsecase revGeoCode = ReverseGeocodingUsecase();
 
+typedef routesType = (List<LatLng>, int);
+
+class _MapPageState extends State<MapPage> {
+  ReverseGeocodingUsecase revGeoCode = ReverseGeocodingUsecase();
+  GetRouteUsecase route = GetRouteUsecase();
   final Completer<GoogleMapController> _controller = Completer();
   Position? currDevicePosition;
   
+  Polyline? polyLine;
 
   Set<Marker> userMarker = <Marker>{Marker(markerId: MarkerId("UserMarker"),)};
   Place? userPlace;
   Place? destPlace;
 
+  
+
+  void findRoute(Place userP, Place destP) async {
+    var googleRoute = await route.getRoute(userP, destP);
+
+    setState(() {
+      polyLine = Polyline(
+        polylineId: PolylineId("polyRoutes"), 
+        color: CupertinoColors.activeBlue, 
+        points: googleRoute.$1,
+      );  
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-
+    
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
         middle: Text("Long press to select Place"),
@@ -79,13 +98,13 @@ class _mapPageState extends State<mapPage> {
           onMapCreated: (controller) {
             _controller.complete(controller);
           },
+          polylines: polyLine != null ? <Polyline>{polyLine!} : <Polyline>{},
+
           onLongPress : (latlong) async {
             var destPlace = await revGeoCode.call(latlong);
             destPlace.latNlong = latlong;
-            setState(() {
-              this.destPlace = destPlace;
-            });
-
+            this.destPlace = destPlace;
+          
             Marker destinationMarker = Marker(
               markerId: MarkerId("destinationMarker"),
               position: this.destPlace?.latNlong ?? LatLng(0.0, 0.0),
@@ -97,6 +116,11 @@ class _mapPageState extends State<mapPage> {
             setState(() {
               this.destPlace = destPlace;
               userMarker.add(destinationMarker);
+              
+              if (userPlace != null && this.destPlace != null) {
+                findRoute(userPlace!, this.destPlace!);
+              }
+
             });
           },
           markers: userMarker,

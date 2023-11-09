@@ -1,10 +1,9 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
+
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../core/entities/places.dart';

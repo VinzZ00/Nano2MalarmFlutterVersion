@@ -1,3 +1,6 @@
+# Credential Key
+/lib/core/constant/google_key_constant.dart
+
 # Miscellaneous
 *.class
 *.log
@@ -31,7 +34,7 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
-/lib/core/constant/GoogleKeyConstant.dart
+
 # Symbolication related
 app.*.symbols
 

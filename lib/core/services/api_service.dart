@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'dart:io';
+
 
 import 'package:http/http.dart' as http;
-import 'package:replicanano2_malarm/core/entities/places.dart';
+
 import 'dart:convert';
 
 class APIService {
@@ -41,8 +41,11 @@ class APIService {
       print("Error");
       throw Exception("Elvin-98 Future<Map<String, dynamic>> postRequest return status code != 200, status : ${response.statusCode}");
     }
+    print("url : $url with post request and header : $header");
+    print("requestBody : $requestBody");
+    print("response : ${jsonDecode(response.body)}");
 
-    return response as Map<String, dynamic>;
+    return jsonDecode(response.body);
 
   }
 }
