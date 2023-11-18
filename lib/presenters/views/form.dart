@@ -297,8 +297,13 @@ class _FormPageState extends State<FormPage> {
                     ) : 
                     SizedBox.shrink(),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(16, 0, 0, 0),
+                          child: (mapRes?.estimatedTime != null) ? Text("Estimated Time : ${mapRes!.estimatedTime} ${(mapRes!.estimatedTime > 1 ? "seconds" : "second")}") : SizedBox.shrink()
+                          ),
+
                         // Expanded(
                         //   flex: 2,
                         //   child: 

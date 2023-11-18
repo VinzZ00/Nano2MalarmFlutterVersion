@@ -33,7 +33,7 @@ class MapPageState extends State<MapPage> {
   GetRouteUsecase route = GetRouteUsecase();
   final Completer<GoogleMapController> _controller = Completer();
   Position? currDevicePosition;
-  
+  int estimatedTime = 0;
   Polyline? polyLine;
 
   Set<Marker> userMarker = <Marker>{};
@@ -51,6 +51,8 @@ class MapPageState extends State<MapPage> {
         color: CupertinoColors.activeBlue, 
         points: googleRoute.$1,
       );  
+
+      estimatedTime = googleRoute.$2;
     });
   }
 
@@ -122,7 +124,8 @@ class MapPageState extends State<MapPage> {
               
               var destinationMarker = userMarker.firstWhere((m) => m.markerId == MarkerId("destinationMarker"));
 
-              returnMapData data = returnMapData(stringValue: "", mapValue: {}, polyline: polyLine!);
+              // ignore: unnecessary_this
+              returnMapData data = returnMapData(stringValue: "", mapValue: {}, polyline: polyLine!,estimatedTime: this.estimatedTime);
               
               if (userPlace != null && destPlace != null) {
                 
@@ -213,9 +216,16 @@ class MapPageState extends State<MapPage> {
     setState(() {
       userPlace = place;
       currDevicePosition = retrievedLoc;
-      
+      // print("userMarker testing : ${}");
+      print("true false : ${(!userMarker.map((e) => e.markerId == MarkerId("UserMarker")).isNotEmpty)}");
+      if (!userMarker.map((e) => e.markerId == MarkerId("UserMarker")).isNotEmpty) {
+        userMarker.removeWhere((e) => e.markerId == MarkerId("UserMarker"));
+      }
+
       // userMarker = <Marker>{Marker(markerId: MarkerId("UserMarker"), position: LatLng(currDevicePosition!.latitude, currDevicePosition!.longitude))};
       userMarker.add(Marker(markerId: MarkerId("UserMarker"), position: LatLng(currDevicePosition!.latitude, currDevicePosition!.longitude), infoWindow: InfoWindow(title : (place.name != "") ? place.name : "Your Current Location")));
+      print("marker lenght : ${userMarker.length}");
+      
     });
 
     final GoogleMapController controller = await _controller.future;

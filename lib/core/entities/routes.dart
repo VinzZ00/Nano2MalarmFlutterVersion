@@ -13,10 +13,10 @@ class GoogleRoute {
       print("masuk ke error");
       return GoogleRoute(-1, "");
     } else {
-      print("masuk ke sini");
-      print("json : ${json}");
       var sec = json['routes'][0]['duration'] as String;
-      var second = int.tryParse(sec.substring(0, sec.length)) ?? -1;
+
+
+      var second = int.tryParse(sec.substring(0, sec.length - 1)) ?? -1;
 
       // print("poly: ${json['routes'][0]['polyline']["encodedPolyline"]}");
 
