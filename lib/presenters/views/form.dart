@@ -9,7 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:replicanano2_malarm/data/usecases/getRoutes.dart';
+import 'package:replicanano2_malarm/data/usecases/googleAPI/getRoutes.dart';
 import 'package:replicanano2_malarm/presenters/views/map_view.dart';
 import 'package:replicanano2_malarm/presenters/views/models/map_form_return.dart';
 
@@ -30,17 +30,12 @@ class _FormPageState extends State<FormPage> {
   
   final List<String> transporationType = ["Drive", "Bicylce", "Walk", "Motor Cycle"];
   String selectedTypeTrans = "Drive";
-  late GlobalKey<MapPageState> mapGlobalKey;
-  // GoogleMap? map;
-  // Marker? userLoc;
-  // Marker? destLoc;
-  // Place? userPlace;
-  // Place? destPlace;
-  // String? destName;
   
   DateTime selectedDate = DateTime(2023, 10, 18, 16, 36);
   var eventNameTextController = TextEditingController(text: "");
   var descriptionTextController = TextEditingController(text: "");
+
+
 
   void _showDialog(Widget child, double size) {
     showCupertinoModalPopup<void>(
@@ -130,13 +125,44 @@ class _FormPageState extends State<FormPage> {
           onTap: () {},
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Text(
-                "Done",
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  color: CupertinoColors.activeBlue,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  if (eventNameTextController.text.isNotEmpty || descriptionTextController.text.isNotEmpty) {
+                    // print("True false : ${eventNameTextController.text.isEmpty}");
+                    // print("masuk ke sini ");
+                    // print("event name : ${eventNameTextController.text}, ${descriptionTextController.text}");
+
+
+
+                  } else {
+                    showCupertinoModalPopup<void>(
+                      context: context,
+                      builder: (BuildContext context) => CupertinoAlertDialog(
+                        title: const Text('Please fill all the fill'),
+                        content: Text("the Event Field and the Description Field can't be empty"),
+                        actions: <Widget>[
+                          CupertinoDialogAction(
+                            /// This parameter indicates this action is the default,
+                            /// and turns the action's text to bold text.
+                            isDefaultAction: true,
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('OK'),
+                          ),
+                        ]
+                      )
+                    );
+                  }
+                },
+                child: Text(
+                  "Done",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w600,
+                    color: CupertinoColors.activeBlue,
+                  ),
                 ),
               ),
             ],
