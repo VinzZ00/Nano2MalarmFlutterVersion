@@ -8,15 +8,20 @@ class GetRouteUsecase{
 
   RemoteAPIRepository repo = RemoteAPIRepository();
   PolylinePoints polyLineDecoder = PolylinePoints();
-  Future<(List<LatLng>, int)> getRoute(Place origin, Place dest) async {
+
+  Future<(List<LatLng>, int)> getRoute(Place origin, Place dest, String transportType) async {
     
     print("inside future willStartOper");
+    print("TransportationType : $transportType");
 
-    var response = await repo.googleRouteDataSource.getRoute(origin, dest);
+    var response = await repo.googleRouteDataSource.getRoute(origin, dest, transportType);
     List<PointLatLng> polylinePoints = polyLineDecoder.decodePolyline(response.polyLine);
     List<LatLng> latlong = polylinePoints.map((e) => LatLng(e.latitude, e.longitude)).toList();
 
     print("done Oper with : $latlong, and estimated time : ${response.second}");
+    print("this is latlong");
+    print("latlonng : $latlong");
     return (latlong, response.second);
   }
+  
 }

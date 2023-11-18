@@ -37,13 +37,15 @@ class APIService {
     String url = '${[baseUrl, appendingUrl].join("/")}';
     final response = await http.post(Uri.parse(url), headers: header, body: jsonEncode(requestBody));
 
+    print("url : $url with post request and header : $header");
+    print("requestBody : $requestBody");
+    print("response : ${jsonDecode(response.body)}");
+
     if (response.statusCode  != 200) {
       print("Error");
       throw Exception("Elvin-98 Future<Map<String, dynamic>> postRequest return status code != 200, status : ${response.statusCode}");
     }
-    print("url : $url with post request and header : $header");
-    print("requestBody : $requestBody");
-    print("response : ${jsonDecode(response.body)}");
+    
 
     return jsonDecode(response.body);
 

@@ -21,7 +21,8 @@ Future<Position> determinePosition() async {
     return Future.error('Location Permission is permanently denied.');
   }
 
-
+  print("Location Latitude and Longitude : ${(await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation)).latitude}");
+  print("Location Latitude and Longitude : ${(await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation)).longitude}");
 
   return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.bestForNavigation);
 }

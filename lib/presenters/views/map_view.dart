@@ -6,27 +6,29 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:replicanano2_malarm/core/services/geolocator.dart';
 
 import 'package:replicanano2_malarm/data/usecases/ReverseGeoCoding.dart';
 import 'package:replicanano2_malarm/data/usecases/getRoutes.dart';
+import 'package:replicanano2_malarm/presenters/views/models/map_form_return.dart';
 
 import '../../core/entities/places.dart';
 
 
+
 class MapPage extends StatefulWidget {
-  const MapPage({super.key});
+  final GlobalKey<MapPageState> mapGlobalKey;
+
+  const MapPage({super.key, required this.mapGlobalKey});
 
   @override
-  State<MapPage> createState() => _MapPageState();
+  State<MapPage> createState() => MapPageState();
 }
 
-
-typedef routesType = (List<LatLng>, int);
-
-class _MapPageState extends State<MapPage> {
+class MapPageState extends State<MapPage> {
   ReverseGeocodingUsecase revGeoCode = ReverseGeocodingUsecase();
   GetRouteUsecase route = GetRouteUsecase();
   final Completer<GoogleMapController> _controller = Completer();
@@ -34,14 +36,14 @@ class _MapPageState extends State<MapPage> {
   
   Polyline? polyLine;
 
-  Set<Marker> userMarker = <Marker>{Marker(markerId: MarkerId("UserMarker"),)};
+  Set<Marker> userMarker = <Marker>{};
   Place? userPlace;
   Place? destPlace;
-
-  
+  String transportType = "DRIVE";
+  late GoogleMap map;
 
   void findRoute(Place userP, Place destP) async {
-    var googleRoute = await route.getRoute(userP, destP);
+    var googleRoute = await route.getRoute(userP, destP, transportType);
 
     setState(() {
       polyLine = Polyline(
@@ -50,6 +52,54 @@ class _MapPageState extends State<MapPage> {
         points: googleRoute.$1,
       );  
     });
+  }
+
+  Widget createMap() {
+    GoogleMap map = GoogleMap(
+        myLocationButtonEnabled: false,
+        initialCameraPosition: CameraPosition(
+          target: LatLng(0,0),
+        ),
+        onMapCreated: (controller) {
+          _controller.complete(controller);
+        },
+        polylines: polyLine != null ? <Polyline>{polyLine!} : <Polyline>{},
+
+        onLongPress : (latlong) async {
+          var destPlace = await revGeoCode.call(latlong);
+          destPlace.latNlong = latlong;
+          this.destPlace = destPlace;
+        
+          Marker destinationMarker = Marker(
+            markerId: MarkerId("destinationMarker"),
+            position: this.destPlace?.latNlong ?? LatLng(0.0, 0.0),
+            infoWindow: InfoWindow(
+              title: this.destPlace?.name ?? ""
+            )
+          );
+
+          setState(() {
+            this.destPlace = destPlace;
+            userMarker.add(destinationMarker);
+            
+            if (userPlace != null && this.destPlace != null) {
+              findRoute(userPlace!, this.destPlace!);
+            }
+
+          });
+        },
+        markers: userMarker,
+
+        /* MARK: drag user marker to change the user latlong if needed */ 
+        // onCameraMove: (position) {
+        //   setState(() {
+        //     userMarker.add(Marker(markerId: MarkerId("UserMarker"), position : position.target, infoWindow: InfoWindow(title: "Your Current Position")));
+        //   });
+        // },
+      );
+
+    this.map = map;
+    return map;
   }
 
   @override
@@ -61,80 +111,87 @@ class _MapPageState extends State<MapPage> {
         leading: CupertinoNavigationBarBackButton(),
         trailing: GestureDetector(
           onTap: () {
-            if ((userMarker.map((e) => e.markerId) as Set).containsAll({
+            if ((userMarker.map((e) => e.markerId).toSet()).containsAll({
               MarkerId("UserMarker"),
               MarkerId("destinationMarker")
             })) {
-              var destinationMarker = userMarker.firstWhere((m) => m.markerId == MarkerId("destinatiuonMarker"));
+              userMarker.forEach((element) {
+                print("usermarker IDs : ${element.markerId}");
+                print("usermarker IDs : ${element.position}");
+              });
+              
+              var destinationMarker = userMarker.firstWhere((m) => m.markerId == MarkerId("destinationMarker"));
 
-              
-                // Set<(String, Map<String, (Place, Marker)>)> results = <(String, Map<String, (Place, Marker)>)>{(
-                //   "${destinationMarker.infoWindow.title}", {"user" : (userPlace!, userMarker.firstWhere((m) => m.markerId == MarkerId("UserMarker")))}
-                // )};
-              
+              returnMapData data = returnMapData(stringValue: "", mapValue: {}, polyline: polyLine!);
               
               if (userPlace != null && destPlace != null) {
-                Navigator.pop(
-                  context, 
-                  <(String, Map<String, (Place, Marker)>)>{(
-                    "${destinationMarker.infoWindow.title}", {
-                      "user" : (userPlace!, userMarker.firstWhere((m) => m.markerId == MarkerId("UserMarker"))),
-                      "dest" : (destPlace!, destinationMarker)
-                      }
-                  )});
+                
+                data.stringValue = destinationMarker.infoWindow.title!;
+                data.mapValue["user"] = (userPlace!, userMarker.firstWhere((m) => m.markerId == MarkerId("UserMarker")));
+                data.mapValue["dest"] = (destPlace!, destinationMarker);
+
+                print("mapval : ${data.mapValue}");
+                print("stringValue : ${data.stringValue}");
+                Navigator.pop(context, data);
               }
             }
+            print("Done popping");
           },
           child: Text("Done"),
         ),
       ),
       child: Scaffold(
         // MARK: Google Map Code
-        body: GoogleMap(
-          myLocationButtonEnabled: false,
-          initialCameraPosition: CameraPosition(
-            target: LatLng(0,0),
-          ),
-          onMapCreated: (controller) {
-            _controller.complete(controller);
-          },
-          polylines: polyLine != null ? <Polyline>{polyLine!} : <Polyline>{},
+        body: 
+        // GoogleMap(
+        //   myLocationButtonEnabled: false,
+        //   initialCameraPosition: CameraPosition(
+        //     target: LatLng(0,0),
+        //   ),
+        //   onMapCreated: (controller) {
+        //     _controller.complete(controller);
+        //   },
+        //   polylines: polyLine != null ? <Polyline>{polyLine!} : <Polyline>{},
 
-          onLongPress : (latlong) async {
-            var destPlace = await revGeoCode.call(latlong);
-            destPlace.latNlong = latlong;
-            this.destPlace = destPlace;
+        //   onLongPress : (latlong) async {
+        //     var destPlace = await revGeoCode.call(latlong);
+        //     destPlace.latNlong = latlong;
+        //     this.destPlace = destPlace;
           
-            Marker destinationMarker = Marker(
-              markerId: MarkerId("destinationMarker"),
-              position: this.destPlace?.latNlong ?? LatLng(0.0, 0.0),
-              infoWindow: InfoWindow(
-                title: this.destPlace?.name ?? ""
-              )
-            );
+        //     Marker destinationMarker = Marker(
+        //       markerId: MarkerId("destinationMarker"),
+        //       position: this.destPlace?.latNlong ?? LatLng(0.0, 0.0),
+        //       infoWindow: InfoWindow(
+        //         title: this.destPlace?.name ?? ""
+        //       )
+        //     );
 
-            setState(() {
-              this.destPlace = destPlace;
-              userMarker.add(destinationMarker);
+        //     setState(() {
+        //       this.destPlace = destPlace;
+        //       userMarker.add(destinationMarker);
               
-              if (userPlace != null && this.destPlace != null) {
-                findRoute(userPlace!, this.destPlace!);
-              }
+        //       if (userPlace != null && this.destPlace != null) {
+        //         findRoute(userPlace!, this.destPlace!);
+        //       }
 
-            });
-          },
-          markers: userMarker,
+        //     });
+        //   },
+        //   markers: userMarker,
 
-          /* MARK: drag user marker to change the user latlong if needed */ 
-          // onCameraMove: (position) {
-          //   setState(() {
-          //     userMarker.add(Marker(markerId: MarkerId("UserMarker"), position : position.target, infoWindow: InfoWindow(title: "Your Current Position")));
-          //   });
-          // },
-        ),
+        //   /* MARK: drag user marker to change the user latlong if needed */ 
+        //   // onCameraMove: (position) {
+        //   //   setState(() {
+        //   //     userMarker.add(Marker(markerId: MarkerId("UserMarker"), position : position.target, infoWindow: InfoWindow(title: "Your Current Position")));
+        //   //   });
+        //   // },
+        // ),
+        createMap(),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             getcurrentloc();
+            if (destPlace != null) {
+              findRoute(userPlace!, destPlace!);
+            }
           },
           child: Icon(Icons.location_pin),
         ),

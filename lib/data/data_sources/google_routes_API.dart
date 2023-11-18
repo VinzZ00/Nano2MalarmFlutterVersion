@@ -3,7 +3,7 @@ import 'package:replicanano2_malarm/core/entities/places.dart';
 import 'package:replicanano2_malarm/core/entities/routes.dart';
 import 'package:replicanano2_malarm/core/services/api_service.dart';
 
-class GoogleRoutesAbs {
+abstract class GoogleRoutesAbs {
   String baseUrl = "https://routes.googleapis.com/directions/v2:computeRoutes";
   Map<String, String> headers = {
     'Content-Type': 'application/json', // Return Json type
@@ -11,7 +11,7 @@ class GoogleRoutesAbs {
     'X-Goog-FieldMask': 'routes.duration,routes.distanceMeters,routes.polyline.encodedPolyline', // Field masking or else will be overwhelmed
   };
 
-
+  Future<GoogleRoute>getRoute(Place origin, Place destination, String transportType);
 
 }
 
@@ -23,7 +23,7 @@ class GoogleRoutesApiDataSource extends GoogleRoutesAbs {
     apiService = APIService(super.baseUrl);
   }
 
-  Future<GoogleRoute>getRoute(Place origin, Place destination) async {
+  Future<GoogleRoute>getRoute(Place origin, Place destination, String transportType) async {
     Map<String, dynamic> body = 
     {
       "origin": {
@@ -42,9 +42,8 @@ class GoogleRoutesApiDataSource extends GoogleRoutesAbs {
               }
           }
       },
-      "travelMode": "DRIVE",
-      "routingPreference": "TRAFFIC_AWARE",
-      "departureTime": "2023-11-10T15:01:23.045123456Z",
+      "travelMode": transportType,
+      "routingPreference": "ROUTING_PREFERENCE_UNSPECIFIED",
       "computeAlternativeRoutes": false,
       "routeModifiers": {
         "avoidTolls": false,
@@ -55,6 +54,9 @@ class GoogleRoutesApiDataSource extends GoogleRoutesAbs {
 
     var response = await apiService.postRequest("", super.headers, body);
     print("done request from sources");
+    
+    print("Response generated to Google route : ${GoogleRoute.fromJson(response)}");
+    
     return GoogleRoute.fromJson(response);
   }
 
