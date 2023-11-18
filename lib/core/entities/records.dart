@@ -1,5 +1,11 @@
+import 'package:uuid/uuid.dart';
+
+
+
 class CustRecord {
-  String id = "";
+  static var uuid = const Uuid();
+
+  String id = uuid.v4();
   double latitude = 0.0, longitude = 0.0;
   String description = '';
   bool complete = false;
