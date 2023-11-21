@@ -9,9 +9,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:replicanano2_malarm/data/usecases/googleAPI/getRoutes.dart';
-import 'package:replicanano2_malarm/presenters/views/map_view.dart';
-import 'package:replicanano2_malarm/presenters/views/models/map_form_return.dart';
+import 'package:replicanano2_malarm/domain/usecases/googleAPI/getRoutes.dart';
+import 'package:replicanano2_malarm/presenter/views/map_view.dart';
+import 'package:replicanano2_malarm/presenter/models/map_form_return.dart';
 
 
 

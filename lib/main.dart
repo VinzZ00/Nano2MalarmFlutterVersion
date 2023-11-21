@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:replicanano2_malarm/presenters/views/form.dart'; 
-import 'package:replicanano2_malarm/presenters/views/home.dart';
+import 'package:replicanano2_malarm/presenter/views/form.dart'; 
+import 'package:replicanano2_malarm/presenter/views/home.dart';
 
 
 

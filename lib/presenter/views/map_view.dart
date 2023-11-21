@@ -11,9 +11,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:replicanano2_malarm/core/services/geolocator.dart';
 
-import 'package:replicanano2_malarm/data/usecases/googleAPI/ReverseGeoCoding.dart';
-import 'package:replicanano2_malarm/data/usecases/googleAPI/getRoutes.dart';
-import 'package:replicanano2_malarm/presenters/views/models/map_form_return.dart';
+import 'package:replicanano2_malarm/domain/usecases/googleAPI/ReverseGeoCoding.dart';
+import 'package:replicanano2_malarm/domain/usecases/googleAPI/getRoutes.dart';
+import 'package:replicanano2_malarm/presenter/models/map_form_return.dart';
 
 import '../../core/entities/places.dart';
 

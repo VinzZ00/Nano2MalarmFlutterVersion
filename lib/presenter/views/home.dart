@@ -2,9 +2,9 @@
 
 import 'package:flutter/cupertino.dart';
 
-import 'package:replicanano2_malarm/presenters/components/todo_list_record.dart';
+import 'package:replicanano2_malarm/presenter/views/components/todo_list_record.dart';
 import 'package:replicanano2_malarm/core/entities/records.dart';
-import 'package:replicanano2_malarm/presenters/views/form.dart';
+import 'package:replicanano2_malarm/presenter/views/form.dart';
 
 import 'package:uuid/uuid.dart';
 import 'package:replicanano2_malarm/core/services/persistent_storage.dart';
