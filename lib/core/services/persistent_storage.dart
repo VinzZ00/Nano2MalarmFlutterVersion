@@ -47,11 +47,16 @@ class PersistentStorage {
 
       CREATE TABLE record (
         id VARCHAR PRIMARY KEY,
-        latitude DOUBLE,
-        longitude DOUBLE, 
+        uLatitude DOUBLE,
+        uLongitude DOUBLE, 
+        uPlaceId VARCHAR,
+        dLatitude DOUBLE,
+        dLongitude DOUBLE,
+        dPlaceId VARCHAR,
         description TEXT,
         date DATETIME,
         completed INT
+        title VARCHAR
       )
 
     ''');

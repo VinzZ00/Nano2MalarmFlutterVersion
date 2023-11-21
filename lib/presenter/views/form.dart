@@ -9,7 +9,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:replicanano2_malarm/core/entities/records.dart';
 import 'package:replicanano2_malarm/domain/usecases/googleAPI/getRoutes.dart';
+import 'package:replicanano2_malarm/domain/usecases/persistentStorage/Save_To_Persistent_Storage.dart';
+import 'package:replicanano2_malarm/presenter/views/components/todo_list_record.dart';
 import 'package:replicanano2_malarm/presenter/views/map_view.dart';
 import 'package:replicanano2_malarm/presenter/models/map_form_return.dart';
 
@@ -65,6 +68,10 @@ class _FormPageState extends State<FormPage> {
   final Completer<GoogleMapController> _controller = Completer();
 
   GetRouteUsecase getRoute = GetRouteUsecase();
+
+  // MARK: Persistent storage usecase
+  SaveToPersistentStorageUseCase saveRecord = SaveToPersistentStorageUseCase();
+
 
 
   void generateMap() {
@@ -128,12 +135,27 @@ class _FormPageState extends State<FormPage> {
             children: [
               GestureDetector(
                 onTap: () {
-                  if (eventNameTextController.text.isNotEmpty || descriptionTextController.text.isNotEmpty) {
+                  if (eventNameTextController.text.isNotEmpty || descriptionTextController.text.isNotEmpty || mapRes == null) {
                     // print("True false : ${eventNameTextController.text.isEmpty}");
                     // print("masuk ke sini ");
                     // print("event name : ${eventNameTextController.text}, ${descriptionTextController.text}");
 
+                    var userPlace = mapRes!.mapValue['user']!.$1;
+                    var destPlace = mapRes!.mapValue['dest']!.$1;
 
+                    CustRecord rec = CustRecord(
+                      userPlace.latNlong.latitude, 
+                      userPlace.latNlong.longitude, 
+                      userPlace.placeId, 
+                      destPlace.latNlong.latitude, 
+                      destPlace.latNlong.longitude, 
+                      destPlace.placeId, 
+                      descriptionTextController.text, 
+                      false, 
+                      eventNameTextController.text
+                    );
+
+                    saveRecord.save(rec);
 
                   } else {
                     showCupertinoModalPopup<void>(

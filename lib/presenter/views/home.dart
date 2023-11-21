@@ -40,7 +40,7 @@ class _MyWidgetState extends State<HomeWidget> {
 
   List<CustRecord> toDoListRecord = [];
 
-  var rec = CustRecord('', 0.0, 0.0, '', DateTime.now(), false);
+  var rec = CustRecord(0, 0, '', 0, 0, '', '', false, '');
 
   String id = const Uuid().toString();
   double latitude = 0.0, longitude = 0.0;
@@ -77,14 +77,6 @@ class _MyWidgetState extends State<HomeWidget> {
 
   List<Widget> createRowData() {
     List<Widget> rows = [];
-    
-    // TODO : Delete this when the save data to sql is done, this is only mock data.
-
-    List<CustRecord> toDoListRecord = [
-      CustRecord('1', 0.0, 0.0, 'Description 1 abcdefghijklmn', DateTime.now(), true),
-      CustRecord('2', 0.0, 0.0, 'Description 2 ', DateTime.now(), false),
-      CustRecord('3', 0.0, 0.0, 'Desc 3', DateTime.now(), true),
-    ];
 
     for (var rec in toDoListRecord) {
       rows.add(RecordOfToDoList(rec: rec));
