@@ -28,7 +28,7 @@ class _MyWidgetState extends State<HomeWidget> {
         direction: DismissDirection.down,
         onDismissed: (_) {
           Navigator.pop(context);
-        },
+        }, 
         child: FormPage(key: ValueKey("FormPage"))
       )
     );
