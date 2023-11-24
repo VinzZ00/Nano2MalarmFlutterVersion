@@ -53,9 +53,9 @@ class PersistentStorage {
         dLatitude DOUBLE,
         dLongitude DOUBLE,
         dPlaceId VARCHAR,
-        description TEXT,
-        date DATETIME,
-        completed INT
+        description VARCHAR,
+        date VARCHAR,
+        completed INT,
         title VARCHAR
       )
 
@@ -72,11 +72,17 @@ class PersistentStorage {
       "record", 
       columns: [
         'id',
-        'latitude',
-        'longitude',
+        'uLatitude',
+        'uLongitude',
+        'uPlaceId',
+        'dLatitude',
+        'dLongitude',
+        'dPlaceId',
         'description',
         'date',
-        'completed'
+        'completed',
+        'title',
+
       ]);
   }
 }

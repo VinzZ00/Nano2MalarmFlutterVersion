@@ -20,9 +20,8 @@ import '../../core/entities/places.dart';
 
 
 class MapPage extends StatefulWidget {
-  final GlobalKey<MapPageState> mapGlobalKey;
 
-  const MapPage({super.key, required this.mapGlobalKey});
+  const MapPage({super.key});
 
   @override
   State<MapPage> createState() => MapPageState();

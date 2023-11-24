@@ -40,7 +40,7 @@ class _MyWidgetState extends State<HomeWidget> {
 
   List<CustRecord> toDoListRecord = [];
 
-  var rec = CustRecord(0, 0, '', 0, 0, '', '', false, '');
+  
 
   String id = const Uuid().toString();
   double latitude = 0.0, longitude = 0.0;
@@ -49,7 +49,6 @@ class _MyWidgetState extends State<HomeWidget> {
 
   @override
   Widget build(BuildContext context) {
-
 
     _scafoldContext = context;  
     return CupertinoPageScaffold(
@@ -78,9 +77,14 @@ class _MyWidgetState extends State<HomeWidget> {
   List<Widget> createRowData() {
     List<Widget> rows = [];
 
+    
+
     for (var rec in toDoListRecord) {
+      print("Record of Home 2: ${rec.toMap()}");
       rows.add(RecordOfToDoList(rec: rec));
     }
+
+    
 
     return rows;
   }
@@ -93,17 +97,36 @@ class _MyWidgetState extends State<HomeWidget> {
   }
 
   void getRecordUseCase() async {
-
-    toDoListRecord = [];
+    List<CustRecord> fetchedRecord = [];
 
     var db = await dbPromise;
     var results = persistentStorage.getRow(db);
     var res = await results;
 
+
+
     for (var record in res) {
-      rec.fromMap(record);
-      toDoListRecord.add(rec);
+      print("Record of Home : ${record}");
+      
+      var rec = CustRecord.init().fromMap(record);
+
+      print("rec adalah : ${rec.toMap()}");
+      
+
+
+      fetchedRecord.add(rec);
+
+      fetchedRecord.forEach((e) { print("e Title : ${e.title}"); });
     }
+    setState(() {
+        toDoListRecord = [];
+
+        fetchedRecord.forEach((e) { print("c Title : ${e.title}"); });
+
+        toDoListRecord = fetchedRecord;
+    });
+
+    toDoListRecord.forEach((b) { print("b Title : ${b.title}"); });
   }
 }
 

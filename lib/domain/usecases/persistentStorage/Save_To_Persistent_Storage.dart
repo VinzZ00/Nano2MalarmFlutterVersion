@@ -16,8 +16,10 @@ class SaveToPersistentStorageUseCase {
   }
 
   Future<int>save(CustRecord rec) async  {
-    var rowId = await database.insert("record", rec.toMap(), conflictAlgorithm: ConflictAlgorithm.fail);
+    print("rec.toMap : ${rec.toMap()}");
 
+    var rowId = await database.insert("record", rec.toMap(), conflictAlgorithm: ConflictAlgorithm.fail);
+    
     if (rowId != -1) {
       return rowId;
     } else {

@@ -12,7 +12,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:replicanano2_malarm/core/entities/records.dart';
 import 'package:replicanano2_malarm/domain/usecases/googleAPI/getRoutes.dart';
 import 'package:replicanano2_malarm/domain/usecases/persistentStorage/Save_To_Persistent_Storage.dart';
-import 'package:replicanano2_malarm/presenter/views/components/todo_list_record.dart';
 import 'package:replicanano2_malarm/presenter/views/map_view.dart';
 import 'package:replicanano2_malarm/presenter/models/map_form_return.dart';
 
@@ -152,6 +151,7 @@ class _FormPageState extends State<FormPage> {
                       destPlace.placeId, 
                       descriptionTextController.text, 
                       false, 
+                      selectedDate,
                       eventNameTextController.text
                     );
 
@@ -258,7 +258,7 @@ class _FormPageState extends State<FormPage> {
                     
                     var result = await Navigator.of(context).push(
                       CupertinoModalPopupRoute(
-                        builder: (context) => MapPage(mapGlobalKey: GlobalKey(debugLabel: "GlobalMap"))
+                        builder: (context) => MapPage()
                         )
                     );
 
@@ -338,7 +338,7 @@ class _FormPageState extends State<FormPage> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(50)),
                         ),
-                        height: 280,
+                        height: 247,
                         child: map!
                       ),
                       )
@@ -368,7 +368,7 @@ class _FormPageState extends State<FormPage> {
                               showCupertinoModalPopup<void>(
                                 context: context,
                                 builder: (BuildContext context) => Container(
-                                  height: 216,
+                                  height: 160,
                                   padding: const EdgeInsets.only(top: 6.0),
                                     // The Bottom margin is provided to align the popup above the system
                                     // navigation bar.

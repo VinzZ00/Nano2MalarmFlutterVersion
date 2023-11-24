@@ -10,12 +10,18 @@ class CustRecord {
   String uPlaceId = "", dPlaceId = "";
   String description = '';
   bool complete = false;
-  DateTime date = DateTime.now();
+  String date = DateTime.now().toString();
   String title = '';
   
-  CustRecord.fromMap(this.id, this.uLatitude, this.uLongitude, this.uPlaceId, this.dLatitude, this.dLongitude, this.dPlaceId, this.description, this.complete, this.title);
+  CustRecord.init();
 
-  CustRecord(this.uLatitude, this.uLongitude, this.uPlaceId, this.dLatitude, this.dLongitude, this.dPlaceId, this.description, this.complete, this.title);
+  CustRecord.fromMap(this.id, this.uLatitude, this.uLongitude, this.uPlaceId, this.dLatitude, this.dLongitude, this.dPlaceId, this.description, this.complete, DateTime date,this.title) {
+    this.date = date.toString();
+  }
+
+  CustRecord(this.uLatitude, this.uLongitude, this.uPlaceId, this.dLatitude, this.dLongitude, this.dPlaceId, this.description, this.complete, DateTime date, this.title) {
+    this.date = date.toString();
+  }
   
   Map<String, Object> toMap() => 
   {
@@ -28,7 +34,7 @@ class CustRecord {
     'dPlaceId' : dPlaceId,
     'description' : description,
     'date' : date,
-    'complete' : complete == true ? 1 : 0,
+    'completed' : complete == true ? 1 : 0,
     'title' : title
   };
 
@@ -41,10 +47,10 @@ class CustRecord {
     dLongitude = map['dLongitude'] as double;
     dPlaceId = map['dPlaceId'] as String;
     description = map['description'] as String;
-    date = map['date'] as DateTime;
-    complete = (map['complete'] as int == 1 ? true : false);
+    date = map['date'];
+    complete = (map['completed'] as int == 1 ? true : false);
     title = map['title'] as String;
-    return CustRecord.fromMap(id, uLatitude, uLongitude, uPlaceId, dLatitude, dLongitude, dPlaceId, description, complete, title);
+    return CustRecord.fromMap(id, uLatitude, uLongitude, uPlaceId, dLatitude, dLongitude, dPlaceId, description, complete, DateTime.parse(date), title);
   }
 
 }

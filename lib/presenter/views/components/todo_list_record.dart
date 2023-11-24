@@ -27,7 +27,7 @@ class RecordOfToDoList extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(dateFormatter.format(rec.date)),
+                Text(dateFormatter.format(DateTime.parse(rec.date))),
                 Text(
                   rec.complete == true ? "Complete" : "Incomplete",
                   style : TextStyle(
@@ -46,7 +46,7 @@ class RecordOfToDoList extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    timeFormatter.format(rec.date),
+                    timeFormatter.format(DateTime.parse(rec.date)),
                     style: TextStyle(fontSize: 70),
                     ),
                   Text(rec.description.length > 7 ? "${rec.description.substring(0,7)}..." : rec.description),
